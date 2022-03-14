@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Link} from "react-router-dom";
+import styles from './HomePage.module.scss'
+import Header from "../components/Header/Header";
 
-const HomePage = () => {
+const HomePage: FC = () => {
     return (
-        <div>
-            <Link to='/cart'>Cart</Link>
-            HomePage
-        </div>
+        <section className={styles.container}>
+            <Header/>
+        </section>
     );
 };
 

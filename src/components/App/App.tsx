@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Route, Routes} from "react-router-dom";
 import HomePage from "../../pages/HomePage";
 import CartPage from "../../pages/CartPage";
 import NotFound from "../../pages/NotFound";
 
-function App() {
+const App: FC = () => {
     return (
         <Routes>
             <Route path='/' element={<HomePage/>}/>
