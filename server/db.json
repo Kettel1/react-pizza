@@ -55,7 +55,7 @@
       "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/1e1a6e80-b3ba-4a44-b6b9-beae5b1fbf27.jpg",
       "name": "Крэйзи пепперони",
       "types": [0],
-      "sizes": [30, 40],
+      "sizes": [26, 30, 40],
       "price": 580,
       "category": 2,
       "rating": 2
@@ -95,7 +95,7 @@
       "imageUrl": "https://dodopizza.azureedge.net/static/Img/Products/Pizza/ru-RU/30367198-f3bd-44ed-9314-6f717960da07.jpg",
       "name": "Овощи и грибы 🌱",
       "types": [0, 1],
-      "sizes": [26, 30, 40],
+      "sizes": [26, 30],
       "price": 285,
       "category": 5,
       "rating": 7

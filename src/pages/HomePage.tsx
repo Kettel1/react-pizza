@@ -1,13 +1,14 @@
 import React, {FC} from 'react';
-import {Link} from "react-router-dom";
-import styles from './HomePage.module.scss'
 import Header from "../components/Header/Header";
+import Container from "../components/Container/Container";
+import Content from "../components/Content/Content";
 
 const HomePage: FC = () => {
     return (
-        <section className={styles.container}>
+        <Container>
             <Header/>
-        </section>
+            <Content/>
+        </Container>
     );
 };
 
