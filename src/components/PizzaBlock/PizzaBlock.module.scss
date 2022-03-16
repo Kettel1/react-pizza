@@ -1,0 +1,116 @@
+.container {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.name {
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.infoContainer {
+    background: #F3F3F3;
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    margin-top: auto;
+}
+
+.indicator {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: -17px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    transition: transform 300ms cubic-bezier(.02, .94, .09, .97),
+    background 300ms cubic-bezier(.17, .67, .14, 1.03);
+    transform: translate3d(1rem, 0, 0);
+    z-index: 1;
+}
+
+
+.categoriesList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    position: relative;
+
+    &:not(:last-child) {
+        margin-bottom: 7px;
+    }
+
+    & label {
+        text-align: center;
+        letter-spacing: 0.015em;
+        color: #2C2C2C;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 17px;
+        text-transform: lowercase;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 100%;
+        padding: 8px;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    & label.categoriesItemNotActive {
+        color: rgba(44, 44, 44, 0.2);
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    & label.categoriesItemActive {
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        border-radius: 5px;
+        cursor: auto;
+    }
+
+    & input[type='radio'] {
+        position: absolute;
+        display: none;
+    }
+
+    & input[type='radio']:disabled ~ label{
+        color: rgba(44, 44, 44, 0.2);
+        cursor: auto;
+    }
+
+    & input[id='size26']:checked ~ .indicator {
+        transform: translate3d(1.2rem, 0, 0);
+    }
+
+    & input[id='size30']:checked ~ .indicator {
+        transform: translate3d(6.5rem, 0, 0);
+    }
+
+    & input[id='size40']:checked ~ .indicator {
+        transform: translate3d(12rem, 0, 0);
+    }
+
+    & input[id='type0']:checked ~ .indicator {
+        transform: translate3d(1.2rem, 0, 0);
+    }
+
+    & input[id='type1']:checked ~ .indicator {
+        transform: translate3d(9.3rem, 0, 0);
+    }
+}
+
+.cartContainer{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}

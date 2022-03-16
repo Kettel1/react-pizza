@@ -1,0 +1,15 @@
+export interface IPizzaStateContext {
+    pizza: any,
+    loading: boolean
+}
+
+export interface IPizza {
+    id: number,
+    name: string,
+    imageUrl: string,
+    types: Array<number>,
+    sizes: Array<number>,
+    price: number,
+    category: number,
+    rating: number
+}

@@ -1,12 +1,14 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+import React, {FC} from 'react';
+import Header from "../components/Header/Header";
+import Container from "../components/Container/Container";
+import Content from "../components/Content/Content";
 
-const HomePage = () => {
+const HomePage: FC = () => {
     return (
-        <div>
-            <Link to='/cart'>Cart</Link>
-            HomePage
-        </div>
+        <Container>
+            <Header/>
+            <Content/>
+        </Container>
     );
 };
 
