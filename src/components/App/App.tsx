@@ -7,7 +7,7 @@ import {PizzaState} from "../../context/PizzaState";
 
 const App: FC = () => {
     const [loading, setLoading] = useState(false)
-    const [pizza, setPizza] = useState(null)
+    const [pizza, setPizza] = useState([])
     const getPizzaFromServer = async () => {
         return await fetch('http://localhost:4000/pizzas')
     }

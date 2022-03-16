@@ -5,10 +5,11 @@ export interface IPizzaStateContext {
 
 export interface IPizza {
     id: number,
+    name: string,
     imageUrl: string,
     types: Array<number>,
     sizes: Array<number>,
     price: number,
     category: number,
-    ratting: number
+    rating: number
 }

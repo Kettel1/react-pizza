@@ -1,8 +1,10 @@
-import React, {ReactNode, useState, FC, ChangeEvent, useContext} from 'react';
+import React, {ReactNode, useState, FC, ChangeEvent, useContext, useEffect} from 'react';
 import styles from './Content.module.scss'
 import useComponentVisible from "../../hooks/useComponentVisible";
+import useCart from "../../hooks/useCart";
 import {PizzaState} from "../../context/PizzaState";
 import PizzaBlock from "../PizzaBlock/PizzaBlock";
+import {IPizza} from "../../types/PizzaTypes";
 
 const Tab: FC<{
     children: ReactNode,
@@ -87,10 +89,11 @@ const SortBy = () => {
 
 
 const Content = () => {
+    const {cart, addPizzaToCart, findCurrentPizza, deletePizzaFromCart, filterPizzasInCartById} = useCart()
     const {pizza, loading} = useContext(PizzaState) as any
 
-    console.log(pizza)
-    console.log(loading)
+
+
 
 
     return (
@@ -99,8 +102,23 @@ const Content = () => {
                 <Categories/>
                 <SortBy/>
             </section>
-            <section>
-                <PizzaBlock/>
+            <section className={styles.pizzaContainer}>
+                {pizza.length && loading && pizza.map((item: IPizza) => {
+                    return (
+                        <PizzaBlock
+                            key={item.id}
+                            imageUrl={item.imageUrl}
+                            name={item.name}
+                            sizes={item.sizes}
+                            price={item.price}
+                            types={item.types}
+                            id={item.id}
+                            addPizza={addPizzaToCart}
+                            filterPizzas={filterPizzasInCartById}
+
+                        />
+                    )
+                })}
             </section>
         </>
     );

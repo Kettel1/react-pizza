@@ -69,7 +69,6 @@
     padding: 10px 14px;
     font-size: 14px;
 
-
     &:hover {
         font-weight: 700;
         letter-spacing: 0.015em;
@@ -77,4 +76,10 @@
         background: rgba(254, 95, 30, 0.05);
         cursor: pointer;
     }
+}
+
+.pizzaContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 2vw;
 }
