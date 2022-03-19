@@ -1,3 +1,5 @@
+import {Dispatch, SetStateAction} from "react";
+
 export interface IPizzaStateContext {
     pizza: any,
     loading: boolean
@@ -12,4 +14,9 @@ export interface IPizza {
     price: number,
     category: number,
     rating: number
+}
+
+export interface ISort {
+    sort: string,
+    setSort: Dispatch<SetStateAction<string>>
 }

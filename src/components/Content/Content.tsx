@@ -2,9 +2,10 @@ import React, {ReactNode, useState, FC, ChangeEvent, useContext, useEffect} from
 import styles from './Content.module.scss'
 import useComponentVisible from "../../hooks/useComponentVisible";
 import useCart from "../../hooks/useCart";
-import {PizzaState} from "../../context/PizzaState";
+import {PizzaStateContext, usePizza} from "../../context/PizzaStateContext";
+import {SortByContext, useSort} from "../../context/SortByContext";
 import PizzaBlock from "../PizzaBlock/PizzaBlock";
-import {IPizza} from "../../types/PizzaTypes";
+import {IPizza, ISort} from "../../types/PizzaTypes";
 
 const Tab: FC<{
     children: ReactNode,
@@ -53,8 +54,8 @@ const Categories = () => {
     )
 }
 
-const SortBy = () => {
-    const [sort, setSort] = useState('популярности')
+const SortByType:FC = () => {
+    const {sort, setSort} = useSort()
     const {ref, isComponentVisible, setIsComponentVisible} = useComponentVisible(false)
 
     const toggleDropdown = (): void => {
@@ -69,16 +70,15 @@ const SortBy = () => {
     return (
         <div className={styles.sortContainer} ref={ref}>
             <p className={styles.sort}>
-                Сортировка по: <span className={styles.sortTag} onClick={toggleDropdown}>{sort}</span>
+                Сортировка по: <span className={styles.sortTag} onClick={toggleDropdown}>{sort === 'popular' ? 'популярности' : 'цене'}</span>
             </p>
 
             {
                 isComponentVisible
                     ?
                     <ul className={styles.sortList}>
-                        <li className={styles.sortItem} onClick={() => toggleSort('популярности')}>популярности</li>
-                        <li className={styles.sortItem} onClick={() => toggleSort('цене')}>цене</li>
-                        <li className={styles.sortItem} onClick={() => toggleSort('алфавиту')}>алфавиту</li>
+                        <li className={styles.sortItem} onClick={() => toggleSort('popular')}>популярности</li>
+                        <li className={styles.sortItem} onClick={() => toggleSort('price')}>цене</li>
                     </ul>
                     :
                     null
@@ -90,17 +90,13 @@ const SortBy = () => {
 
 const Content = () => {
     const {cart, addPizzaToCart, findCurrentPizza, deletePizzaFromCart, filterPizzasInCartById} = useCart()
-    const {pizza, loading} = useContext(PizzaState) as any
-
-
-
-
+    const {pizza, loading} = usePizza()
 
     return (
         <>
             <section className={styles.contentContainer}>
                 <Categories/>
-                <SortBy/>
+                <SortByType/>
             </section>
             <section className={styles.pizzaContainer}>
                 {pizza.length && loading && pizza.map((item: IPizza) => {
