@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
 import styles from './PizzaBlock.module.scss'
 import AddButton from "../AddButton/AddButton";
-import {PizzaState} from "../../context/PizzaState";
+import {PizzaStateContext} from "../../context/PizzaStateContext";
 import {IPizza, IPizzaStateContext} from "../../types/PizzaTypes";
 
 
