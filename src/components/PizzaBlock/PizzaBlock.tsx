@@ -1,9 +1,7 @@
-import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
+import React, {FC, useCallback, useState} from 'react';
 import styles from './PizzaBlock.module.scss'
 import AddButton from "../AddButton/AddButton";
-import {PizzaStateContext} from "../../context/PizzaStateContext";
-import {IPizza, IPizzaStateContext} from "../../types/PizzaTypes";
-
+import {useTestCart} from "../../context/CartStateContext";
 
 const availableTypes: any = {
     0: 'тонкое',
@@ -19,20 +17,17 @@ const PizzaBlock: FC<{
     sizes: Array<number>,
     price: number
     id: number,
-    addPizza: any,
-    filterPizzas: any,
-}> =React.memo(({
+}> =({
           imageUrl,
           name,
           types,
           sizes,
           price,
           id,
-          addPizza,
-          filterPizzas,
       }) =>  {
     const [activeTypes, setActiveTypes] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
+    const {state, dispatch} = useTestCart()
 
     const onChangeSize = (index: number): void => {
         setActiveSize(index)
@@ -41,7 +36,7 @@ const PizzaBlock: FC<{
         setActiveTypes(index)
     }
 
-    const onAddPizza = () => {
+    const onAddPizza = useCallback(() => {
         const pizza = {
             id,
             name,
@@ -53,10 +48,10 @@ const PizzaBlock: FC<{
 
         setActiveSize(0);
         setActiveTypes(0);
-        addPizza(pizza);
-    }
+        dispatch({type: 'ADD_PIZZA_TO_CART', pizza});
+    }, [activeSize, activeTypes])
 
-    const countPizza = filterPizzas(id)
+    const countPizza = state.filter((item) => item.id === id).length
 
     return (
         <article className={styles.container}>
@@ -100,7 +95,7 @@ const PizzaBlock: FC<{
                                     type="radio"
                                     id={`size${size}`}
                                     value={size}
-                                    name={'size'}
+                                    name={`size`}
                                     disabled={!sizes.includes(size)}
                                     onChange={() => onChangeSize(index)}
                                 />
@@ -108,7 +103,7 @@ const PizzaBlock: FC<{
                                     if (sizes.includes(size)) {
                                         onChangeSize(index)
                                     }
-                                }} htmlFor={'size'}>{size}</label>
+                                }} htmlFor={`size${index}`}>{size}</label>
                             </React.Fragment>
                         )
                     })}
@@ -126,6 +121,6 @@ const PizzaBlock: FC<{
 
         </article>
     );
-});
+};
 
 export default PizzaBlock;

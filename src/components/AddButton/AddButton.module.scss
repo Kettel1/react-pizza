@@ -9,9 +9,60 @@
     font-family: 'Proxima Nova', sans-serif;
     font-style: normal;
     font-weight: 700;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    position: relative;
 
     &:hover {
         color: white;
         background: #EB5A1E;
+
+        & span {
+            background: white;
+            color: #EB5A1E;
+        }
+
+
+    }
+
+    &:after {
+        position: absolute;
+        content: '';
+        top: 13px;
+        left: 17px;
+        height: 14px;
+        width: 4px;
+        border-radius: 2px;
+        background: #EB5A1E;
+
+
+    }
+
+    &:before {
+        position: absolute;
+        content: '';
+        top: 18px;
+        left: 12px;
+        height: 4px;
+        width: 14px;
+        border-radius: 2px;
+        background: #EB5A1E;
+    }
+
+
+
+    & span {
+        display: inline-block;
+        font-weight: 700;
+        font-size: 13px;
+        line-height: 16px;
+        background: #EB5A1E;
+        color: white;
+        padding: 4px;
+        border-radius: 100%;
+        margin-left: 5px;
+        height: 22px;
+        width: 22px;
     }
 }

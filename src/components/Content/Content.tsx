@@ -1,11 +1,10 @@
-import React, {ReactNode, useState, FC, ChangeEvent, useContext, useEffect} from 'react';
+import React, {ReactNode, useState, FC, ChangeEvent} from 'react';
 import styles from './Content.module.scss'
 import useComponentVisible from "../../hooks/useComponentVisible";
-import useCart from "../../hooks/useCart";
-import {PizzaStateContext, usePizza} from "../../context/PizzaStateContext";
-import {SortByContext, useSort} from "../../context/SortByContext";
+import {usePizza} from "../../context/PizzaStateContext";
+import {useSort} from "../../context/SortByContext";
 import PizzaBlock from "../PizzaBlock/PizzaBlock";
-import {IPizza, ISort} from "../../types/PizzaTypes";
+import {IPizza} from "../../types/PizzaTypes";
 
 const Tab: FC<{
     children: ReactNode,
@@ -14,8 +13,10 @@ const Tab: FC<{
     active: boolean
 }> = ({value, onClick, active, children}) => {
     return (
-        <li data-value={value} className={!active ? styles.categoriesItem : styles.categoriesItemActive}
-            onClick={onClick}>
+        <li data-value={value}
+            className={!active ? styles.categoriesItem : styles.categoriesItemActive}
+            onClick={onClick}
+        >
             {children}
         </li>
     )
@@ -54,7 +55,7 @@ const Categories = () => {
     )
 }
 
-const SortByType:FC = () => {
+const SortByType: FC = () => {
     const {sort, setSort} = useSort()
     const {ref, isComponentVisible, setIsComponentVisible} = useComponentVisible(false)
 
@@ -62,23 +63,43 @@ const SortByType:FC = () => {
         setIsComponentVisible(!isComponentVisible)
     }
 
-    const toggleSort = (value: string) => {
-        setSort(value)
+    const toggleSort = (value: 'rating' | 'price') => {
+        if (value === sort.name) {
+            setSort({
+                name: value,
+                params: sort.params === 'asc' ? 'desc' : 'asc'
+            })
+        } else {
+            setSort({
+                name: value,
+                params: 'asc'
+            })
+        }
         setIsComponentVisible(false)
     }
 
     return (
         <div className={styles.sortContainer} ref={ref}>
             <p className={styles.sort}>
-                Сортировка по: <span className={styles.sortTag} onClick={toggleDropdown}>{sort === 'popular' ? 'популярности' : 'цене'}</span>
+                <span>Сортировка по:</span>
+                <span className={styles.sortTag} onClick={toggleDropdown}>
+                    {sort.name === 'rating' ? 'популярности' : 'цене'}
+                    <div className={sort.params === 'asc' ? styles.sortArrowRotated : styles.sortArrow}/>
+                </span>
             </p>
 
             {
                 isComponentVisible
                     ?
                     <ul className={styles.sortList}>
-                        <li className={styles.sortItem} onClick={() => toggleSort('popular')}>популярности</li>
-                        <li className={styles.sortItem} onClick={() => toggleSort('price')}>цене</li>
+                        <li className={styles.sortItem} onClick={() => toggleSort('rating')}>
+                            <span>
+                                популярности
+                            </span>
+                        </li>
+                        <li className={styles.sortItem} onClick={() => toggleSort('price')}>
+                            <span>цене</span>
+                        </li>
                     </ul>
                     :
                     null
@@ -89,7 +110,6 @@ const SortByType:FC = () => {
 
 
 const Content = () => {
-    const {cart, addPizzaToCart, findCurrentPizza, deletePizzaFromCart, filterPizzasInCartById} = useCart()
     const {pizza, loading} = usePizza()
 
     return (
@@ -109,9 +129,6 @@ const Content = () => {
                             price={item.price}
                             types={item.types}
                             id={item.id}
-                            addPizza={addPizzaToCart}
-                            filterPizzas={filterPizzasInCartById}
-
                         />
                     )
                 })}
