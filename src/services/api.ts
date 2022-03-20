@@ -1,5 +1,13 @@
-export const getPizzaFromServer = async (sortParams: {name: 'rating' | 'price', params: 'asc' | 'desc'}, categoryBy: number | null) => {
-    const category = categoryBy === null ? '' : `&category=${categoryBy}`
+export const getPizzaFromServer = async (sortParams: { name: string, params: string }, categoryBy: string | undefined) => {
 
-    return await fetch(`http://localhost:4000/pizzas?_sort=${sortParams.name}&_order=${sortParams.params}${category}`)
+    const category = categoryBy === 'all' ? '' : `&category=${categoryBy}`
+    try {
+        const requestPizzaFromServer = await fetch(`http://localhost:4000/pizzas?_sort=${sortParams.name}&_order=${sortParams.params}${category}`);
+        if (requestPizzaFromServer.ok) {
+            return requestPizzaFromServer.json()
+        }
+    } catch (e) {
+        console.log(e)
+    }
+
 }

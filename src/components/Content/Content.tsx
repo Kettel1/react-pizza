@@ -1,10 +1,12 @@
 import React, {ReactNode, useState, FC, ChangeEvent} from 'react';
 import styles from './Content.module.scss'
 import useComponentVisible from "../../hooks/useComponentVisible";
-import {usePizza} from "../../context/PizzaStateContext";
-import {useSort} from "../../context/SortByContext";
+import {TPizzaStateContext, usePizza} from "../../context/PizzaStateContext";
+import {IUseSort, useSort} from "../../context/SortByTypeContext";
 import PizzaBlock from "../PizzaBlock/PizzaBlock";
 import {IPizza} from "../../types/PizzaTypes";
+import {ICategoryContext, useCategory} from "../../context/SortByCategoryContext";
+type TTab = | 'all' | 'meat' | 'vegan' | 'bbq' | 'hot' | 'closed'
 
 const Tab: FC<{
     children: ReactNode,
@@ -22,12 +24,17 @@ const Tab: FC<{
     )
 }
 
-const Categories = () => {
-    type TTab = | 'all' | 'meat' | 'vegan' | 'bbq' | 'hot' | 'closed'
+const SortByCategories = () => {
 
+    const {category, setCategory} = useCategory() as ICategoryContext
     const [currentTab, setCurrentTab] = useState<TTab>('all')
 
     const onClick = (e: ChangeEvent<HTMLLIElement>) => {
+        const currentCategory = e.target.dataset.value
+
+        if(category !== currentCategory && currentCategory) {
+            setCategory(currentCategory)
+        }
         setCurrentTab(e.target.dataset.value as TTab)
     }
 
@@ -56,7 +63,7 @@ const Categories = () => {
 }
 
 const SortByType: FC = () => {
-    const {sort, setSort} = useSort()
+    const {sort, setSort} = useSort() as IUseSort
     const {ref, isComponentVisible, setIsComponentVisible} = useComponentVisible(false)
 
     const toggleDropdown = (): void => {
@@ -84,7 +91,7 @@ const SortByType: FC = () => {
                 <span>Сортировка по:</span>
                 <span className={styles.sortTag} onClick={toggleDropdown}>
                     {sort.name === 'rating' ? 'популярности' : 'цене'}
-                    <div className={sort.params === 'asc' ? styles.sortArrowRotated : styles.sortArrow}/>
+                    <span className={sort.params === 'asc' ? styles.sortArrowRotated : styles.sortArrow}/>
                 </span>
             </p>
 
@@ -110,16 +117,16 @@ const SortByType: FC = () => {
 
 
 const Content = () => {
-    const {pizza, loading} = usePizza()
+    const {statePizza, loading} = usePizza() as TPizzaStateContext
 
     return (
         <>
             <section className={styles.contentContainer}>
-                <Categories/>
+                <SortByCategories/>
                 <SortByType/>
             </section>
             <section className={styles.pizzaContainer}>
-                {pizza.length && loading && pizza.map((item: IPizza) => {
+                {statePizza.length && loading && statePizza.map((item: IPizza) => {
                     return (
                         <PizzaBlock
                             key={item.id}

@@ -1,49 +1,34 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import {Route, Routes} from "react-router-dom";
 import HomePage from "../../pages/HomePage";
 import CartPage from "../../pages/CartPage";
 import NotFound from "../../pages/NotFound";
-import {PizzaStateContext} from "../../context/PizzaStateContext";
-import {SortByContext} from "../../context/SortByContext";
+import {TPizzaStateContext, usePizza} from "../../context/PizzaStateContext";
+import {IUseSort, useSort} from "../../context/SortByTypeContext";
 import {getPizzaFromServer} from "../../services/api";
-import {CartProvider} from "../../context/CartStateContext"
+import {ICategoryContext, useCategory} from "../../context/SortByCategoryContext";
 
 const App: FC = () => {
     // Sort State
-    const [sort, setSort] = useState<{
-        name: 'rating' | 'price',
-        params: 'asc' | 'desc'
-    }>({
-        name: 'rating',
-        params: 'asc'
-    })
-    const [categoryBy, setCategoryBy] = useState(null)
+    const {sort} = useSort() as IUseSort
+    const {category} = useCategory() as ICategoryContext
 
     //Pizza State
-    const [loading, setLoading] = useState(false)
-    const [pizza, setPizza] = useState([])
+    const {setStatePizza, setLoading} = usePizza() as TPizzaStateContext
 
     useEffect(() => {
-        getPizzaFromServer(sort,categoryBy)
-            .then(response => response.json())
-            .then(data => setPizza(data))
+        setLoading(true)
+        getPizzaFromServer(sort, category)
+            .then(pizzas => setStatePizza(pizzas))
             .finally(() => setLoading(true))
-    }, [sort])
+    }, [sort, category])
 
     return (
-
-        <PizzaStateContext.Provider value={{pizza, loading}}>
-            <SortByContext.Provider value={{sort, setSort}}>
-                <CartProvider>
-                    <Routes>
-                        <Route path='/' element={<HomePage/>}/>
-                        <Route path='/cart' element={<CartPage/>}/>
-                        <Route path='*' element={<NotFound/>}/>
-                    </Routes>
-                </CartProvider>
-            </SortByContext.Provider>
-        </PizzaStateContext.Provider>
-
+        <Routes>
+            <Route path='/' element={<HomePage/>}/>
+            <Route path='/cart' element={<CartPage/>}/>
+            <Route path='*' element={<NotFound/>}/>
+        </Routes>
     );
 }
 

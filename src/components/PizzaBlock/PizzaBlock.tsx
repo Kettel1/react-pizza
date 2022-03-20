@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useState} from 'react';
 import styles from './PizzaBlock.module.scss'
 import AddButton from "../AddButton/AddButton";
-import {useTestCart} from "../../context/CartStateContext";
+import {useCart} from "../../context";
 
 const availableTypes: any = {
     0: 'тонкое',
@@ -27,7 +27,7 @@ const PizzaBlock: FC<{
       }) =>  {
     const [activeTypes, setActiveTypes] = useState(0)
     const [activeSize, setActiveSize] = useState(0)
-    const {state, dispatch} = useTestCart()
+    const {dispatch, getCountPizzaById} = useCart()
 
     const onChangeSize = (index: number): void => {
         setActiveSize(index)
@@ -51,7 +51,6 @@ const PizzaBlock: FC<{
         dispatch({type: 'ADD_PIZZA_TO_CART', pizza});
     }, [activeSize, activeTypes])
 
-    const countPizza = state.filter((item) => item.id === id).length
 
     return (
         <article className={styles.container}>
@@ -115,7 +114,7 @@ const PizzaBlock: FC<{
                 <h3>от {price} ₽</h3>
                 <AddButton onClick={onAddPizza}>
                     Добавить
-                    {countPizza === 0 ? null : <span>{countPizza}</span>}
+                    {getCountPizzaById(id) === 0 ? null : <span>{getCountPizzaById(id)}</span>}
                 </AddButton>
             </section>
 
