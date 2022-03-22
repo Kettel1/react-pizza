@@ -4,7 +4,7 @@
     border: 1px solid #EB5A1E;
     box-sizing: border-box;
     border-radius: 30px;
-    padding: 10px 30px;
+    padding: 10px 20px;
     cursor: pointer;
     font-family: 'Proxima Nova', sans-serif;
     font-style: normal;
@@ -14,6 +14,12 @@
     align-items: center;
     position: relative;
 
+    & svg {
+        margin-right: 5px;
+    }
+
+
+
     &:hover {
         color: white;
         background: #EB5A1E;
@@ -22,30 +28,10 @@
             background: white;
             color: #EB5A1E;
         }
-    }
 
-    &:after {
-        position: absolute;
-        content: '';
-        top: 13px;
-        left: 17px;
-        height: 14px;
-        width: 4px;
-        border-radius: 2px;
-        background: #EB5A1E;
-
-
-    }
-
-    &:before {
-        position: absolute;
-        content: '';
-        top: 18px;
-        left: 12px;
-        height: 4px;
-        width: 14px;
-        border-radius: 2px;
-        background: #EB5A1E;
+        & svg path {
+            fill: white
+        }
     }
 
     & span {

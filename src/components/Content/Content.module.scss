@@ -1,8 +1,7 @@
 .contentContainer {
     display: flex;
+    margin-bottom: 24px;
 }
-
-
 
 .categoriesList {
     display: flex;
@@ -88,7 +87,7 @@
 
 .pizzaContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     grid-gap: 2vw;
 }
 

@@ -6,6 +6,7 @@ import {IUseSort, useSort} from "../../context/SortByTypeContext";
 import PizzaBlock from "../PizzaBlock/PizzaBlock";
 import {IPizza} from "../../types/PizzaTypes";
 import {ICategoryContext, useCategory} from "../../context/SortByCategoryContext";
+import PizzaBlockSkeleton from "../PizzaBlock/PizzaBlockSkeleton";
 type TTab = | 'all' | 'meat' | 'vegan' | 'bbq' | 'hot' | 'closed'
 
 const Tab: FC<{
@@ -28,12 +29,14 @@ const SortByCategories = () => {
 
     const {category, setCategory} = useCategory() as ICategoryContext
     const [currentTab, setCurrentTab] = useState<TTab>('all')
+    const {setLoading} = usePizza() as TPizzaStateContext
 
     const onClick = (e: ChangeEvent<HTMLLIElement>) => {
         const currentCategory = e.target.dataset.value
 
         if(category !== currentCategory && currentCategory) {
             setCategory(currentCategory)
+            setLoading(true)
         }
         setCurrentTab(e.target.dataset.value as TTab)
     }
@@ -115,7 +118,6 @@ const SortByType: FC = () => {
     )
 }
 
-
 const Content = () => {
     const {statePizza, loading} = usePizza() as TPizzaStateContext
 
@@ -125,8 +127,9 @@ const Content = () => {
                 <SortByCategories/>
                 <SortByType/>
             </section>
+            <h2>Все пиццы</h2>
             <section className={styles.pizzaContainer}>
-                {statePizza.length && loading && statePizza.map((item: IPizza) => {
+                {statePizza.length >= 1 && loading ? statePizza.map((item: IPizza) => {
                     return (
                         <PizzaBlock
                             key={item.id}
@@ -138,7 +141,9 @@ const Content = () => {
                             id={item.id}
                         />
                     )
-                })}
+                }) :
+                    Array.from(Array(8).keys()).map((item) => <PizzaBlockSkeleton key={item}/>)
+                }
             </section>
         </>
     );
