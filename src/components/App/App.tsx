@@ -17,9 +17,11 @@ const App: FC = () => {
     const {setStatePizza, setLoading} = usePizza() as TPizzaStateContext
 
     useEffect(() => {
-        setLoading(true)
         getPizzaFromServer(sort, category)
-            .then(pizzas => setStatePizza(pizzas))
+            // Иммитация 2х секундной задержки запроса данных с сервера
+            .then(pizzas => setTimeout(() => {
+                setStatePizza(pizzas)
+            }, 800))
             .finally(() => setLoading(true))
     }, [sort, category])
 

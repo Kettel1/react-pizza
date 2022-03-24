@@ -3,9 +3,18 @@
     align-items: center;
     position: relative;
     margin-bottom: 80px;
+
+    @media screen and (max-width: 425px) {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 .headerContainer {
     display: flex;
+
+    @media screen and (max-width: 425px) {
+        margin-bottom: 50px;
+    }
 }
 
 .titleContainer {
@@ -30,6 +39,11 @@
 
 .cartContainer {
     margin-left: auto;
+    position: relative;
+
+    @media screen and (max-width: 425px) {
+        margin-left: 0;
+    }
 }
 
 .cartLink {
@@ -42,11 +56,14 @@
     padding: 15px 30px;
     text-decoration: none;
     display: flex;
+    position: sticky;
+    top: 0;
+
+    @media screen and (max-width: 425px) {
+        justify-content: space-evenly;
+    }
 }
 
-.cartTotalPrice {
-
-}
 
 .cartLine {
     margin-left: 10px;

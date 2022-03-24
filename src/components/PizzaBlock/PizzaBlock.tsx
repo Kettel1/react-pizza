@@ -37,7 +37,7 @@ const PizzaBlock: FC<{
 
         // за 30 см доплата 60 рублей
         // за 40 см доплата 120 рублей
-        if(index === 0) {
+        if (index === 0) {
             setPizzaPrice(price)
         } else if (index === 1) {
             setPizzaPrice(price + 60)
@@ -71,56 +71,39 @@ const PizzaBlock: FC<{
             <h2 className={styles.name}>{name}</h2>
 
             <div className={styles.infoContainer}>
-                <div className={styles.categoriesList}>
+                <ul className={styles.categoriesList}>
                     {types.map((type, index) => {
                         return (
-                            <React.Fragment key={type}>
-                                <input
-                                    checked={activeTypes === index}
-                                    type="radio"
-                                    id={`type${index}`}
-                                    value={type}
-                                    name={'type'}
-                                    disabled={!types.includes(type)}
-                                    onChange={() => onChangeType(index)}
-                                />
-                                <label onClick={() => {
-                                    if (types.includes(index)) {
-                                        onChangeType(index)
-                                    }
-                                }} htmlFor={'type'}
-                                >
-                                    {availableTypes[type]}
-                                </label>
-                            </React.Fragment>
+                            <motion.li
+                                key={type}
+                                onClick={() => {
+                                    types.includes(type) && onChangeType(index)
+                                }}
+                            >
+                                {activeTypes === index && <motion.div layoutId={`activeType${id}`}/>}
+                                <span>{availableTypes[type]}</span>
+                            </motion.li>
                         )
-                    })}
-                    <div style={{width: `${100 / types.length}%`}} className={styles.indicator}/>
-                </div>
+                    })
+                    }
+                </ul>
 
-                <div className={styles.categoriesList}>
-                    {availableSizes.map((size, index) => {
+                <ul className={styles.categoriesList}>
+                    {sizes.map((size, index) => {
                         return (
-                            <React.Fragment key={size}>
-                                <input
-                                    checked={activeSize === index}
-                                    type="radio"
-                                    id={`size${size}`}
-                                    value={size}
-                                    name={`size`}
-                                    disabled={!sizes.includes(size)}
-                                    onChange={() => onChangeSize(index)}
-                                />
-                                <label onClick={() => {
-                                    if (sizes.includes(size)) {
-                                        onChangeSize(index)
-                                    }
-                                }} htmlFor={`size${index}`}>{size}</label>
-                            </React.Fragment>
+                            <motion.li
+                                key={size}
+                                onClick={() => {
+                                    sizes.includes(size) && onChangeSize(index)
+                                }}
+                            >
+                                {activeSize === index && <motion.div layoutId={`activeSize${id}`}/>}
+                                <span>{size + ' см.'}</span>
+                            </motion.li>
                         )
-                    })}
-                    <div style={{width: `${100 / availableSizes.length}%`}} className={styles.indicator}/>
-                </div>
+                    })
+                    }
+                </ul>
             </div>
 
             <section className={styles.cartContainer}>

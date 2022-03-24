@@ -16,6 +16,15 @@ code {
 
 #root {
   background-color: #FFDF8C;
-  height: 100%;
-  padding: 43px;
+  background-size: 100%;
+  height: 100vh;
+  padding: 45px;
+
+  @media screen and (max-width: 768px) {
+    height: 100%;
+  }
+
+  @media screen and (max-width: 425px) {
+    padding: 20px;
+  }
 }

@@ -7,6 +7,7 @@ import PizzaBlock from "../PizzaBlock/PizzaBlock";
 import {IPizza} from "../../types/PizzaTypes";
 import {ICategoryContext, useCategory} from "../../context/SortByCategoryContext";
 import PizzaBlockSkeleton from "../PizzaBlock/PizzaBlockSkeleton";
+
 type TTab = | 'all' | 'meat' | 'vegan' | 'bbq' | 'hot' | 'closed'
 
 const Tab: FC<{
@@ -17,8 +18,8 @@ const Tab: FC<{
 }> = ({value, onClick, active, children}) => {
     return (
         <li data-value={value}
-            className={!active ? styles.categoriesItem : styles.categoriesItemActive}
-            onClick={onClick}
+             className={!active ? styles.categoriesItem : styles.categoriesItemActive}
+             onClick={onClick}
         >
             {children}
         </li>
@@ -26,17 +27,17 @@ const Tab: FC<{
 }
 
 const SortByCategories = () => {
-
     const {category, setCategory} = useCategory() as ICategoryContext
     const [currentTab, setCurrentTab] = useState<TTab>('all')
-    const {setLoading} = usePizza() as TPizzaStateContext
+    const {setLoading, setStatePizza} = usePizza() as TPizzaStateContext
 
     const onClick = (e: ChangeEvent<HTMLLIElement>) => {
         const currentCategory = e.target.dataset.value
 
-        if(category !== currentCategory && currentCategory) {
+        if (category !== currentCategory && currentCategory) {
             setCategory(currentCategory)
             setLoading(true)
+            setStatePizza([])
         }
         setCurrentTab(e.target.dataset.value as TTab)
     }
@@ -67,6 +68,7 @@ const SortByCategories = () => {
 
 const SortByType: FC = () => {
     const {sort, setSort} = useSort() as IUseSort
+    const {setStatePizza} = usePizza() as TPizzaStateContext
     const {ref, isComponentVisible, setIsComponentVisible} = useComponentVisible(false)
 
     const toggleDropdown = (): void => {
@@ -74,6 +76,7 @@ const SortByType: FC = () => {
     }
 
     const toggleSort = (value: 'rating' | 'price') => {
+        setStatePizza([])
         if (value === sort.name) {
             setSort({
                 name: value,
@@ -130,18 +133,18 @@ const Content = () => {
             <h2>Все пиццы</h2>
             <section className={styles.pizzaContainer}>
                 {statePizza.length >= 1 && loading ? statePizza.map((item: IPizza) => {
-                    return (
-                        <PizzaBlock
-                            key={item.id}
-                            imageUrl={item.imageUrl}
-                            name={item.name}
-                            sizes={item.sizes}
-                            price={item.price}
-                            types={item.types}
-                            id={item.id}
-                        />
-                    )
-                }) :
+                        return (
+                            <PizzaBlock
+                                key={item.id}
+                                imageUrl={item.imageUrl}
+                                name={item.name}
+                                sizes={item.sizes}
+                                price={item.price}
+                                types={item.types}
+                                id={item.id}
+                            />
+                        )
+                    }) :
                     Array.from(Array(8).keys()).map((item) => <PizzaBlockSkeleton key={item}/>)
                 }
             </section>

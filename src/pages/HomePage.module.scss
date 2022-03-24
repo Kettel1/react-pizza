@@ -7,6 +7,10 @@
     margin: 0 auto;
     position: relative;
 
+    @media screen and (max-width: 425px) {
+        padding: 20px;
+    }
+
     &::after {
         position: absolute;
         content: '';
@@ -15,5 +19,9 @@
         background: #F7F7F7;
         top: 125px;
         left: 0;
+
+        @media screen and (max-width: 425px) {
+            top: 175px;
+        }
     }
 }

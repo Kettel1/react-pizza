@@ -48,6 +48,7 @@
     "@types/node-sass": "^4.11.2",
     "@types/react": "^17.0.41",
     "@types/react-dom": "^17.0.14",
+    "@types/react-swipeable-views": "^0.13.1",
     "json-server": "^0.17.0",
     "typescript-plugin-css-modules": "^3.4.0"
   }
