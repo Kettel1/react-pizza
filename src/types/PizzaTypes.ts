@@ -1,10 +1,5 @@
 import {Dispatch, SetStateAction} from "react";
 
-export interface IPizzaStateContext {
-    pizza: any,
-    loading: boolean
-}
-
 export interface IPizza {
     id: number,
     name: string,

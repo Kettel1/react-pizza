@@ -1,15 +1,18 @@
 .contentContainer {
     display: flex;
+    margin-bottom: 24px;
+
+    @media screen and (max-width: 1250px) {
+        flex-direction: column;
+    }
 }
-
-
 
 .categoriesList {
     display: flex;
-    flex-wrap: wrap;
     list-style: none;
     margin: 0;
     padding: 0;
+    overflow-x: auto;
 }
 
 .categoriesItem {
@@ -20,6 +23,7 @@
     background: #F9F9F9;
     padding: 14px 26px;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .categoriesItemActive {
@@ -41,6 +45,11 @@
     font-weight: 700;
     font-size: 14px;
     line-height: 17px;
+    display: flex;
+
+    & span:nth-child(1) {
+        margin-right: 5px;
+    }
 }
 
 .sortTag {
@@ -50,6 +59,8 @@
     color: #FE5F1E;
     text-decoration: underline dotted;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .sortList {
@@ -80,6 +91,30 @@
 
 .pizzaContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    justify-items: center;
     grid-gap: 2vw;
+
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sortArrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    margin-left: 5px;
+}
+
+.sortArrowRotated {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    transform: rotate(180deg);
+    margin-left: 5px;
 }

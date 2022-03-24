@@ -1,11 +1,14 @@
-import React, {ReactNode, useState, FC, ChangeEvent, useContext, useEffect} from 'react';
+import React, {ReactNode, useState, FC, ChangeEvent} from 'react';
 import styles from './Content.module.scss'
 import useComponentVisible from "../../hooks/useComponentVisible";
-import useCart from "../../hooks/useCart";
-import {PizzaStateContext, usePizza} from "../../context/PizzaStateContext";
-import {SortByContext, useSort} from "../../context/SortByContext";
+import {TPizzaStateContext, usePizza} from "../../context/PizzaStateContext";
+import {IUseSort, useSort} from "../../context/SortByTypeContext";
 import PizzaBlock from "../PizzaBlock/PizzaBlock";
-import {IPizza, ISort} from "../../types/PizzaTypes";
+import {IPizza} from "../../types/PizzaTypes";
+import {ICategoryContext, useCategory} from "../../context/SortByCategoryContext";
+import PizzaBlockSkeleton from "../PizzaBlock/PizzaBlockSkeleton";
+
+type TTab = | 'all' | 'meat' | 'vegan' | 'bbq' | 'hot' | 'closed'
 
 const Tab: FC<{
     children: ReactNode,
@@ -14,19 +17,28 @@ const Tab: FC<{
     active: boolean
 }> = ({value, onClick, active, children}) => {
     return (
-        <li data-value={value} className={!active ? styles.categoriesItem : styles.categoriesItemActive}
-            onClick={onClick}>
+        <li data-value={value}
+             className={!active ? styles.categoriesItem : styles.categoriesItemActive}
+             onClick={onClick}
+        >
             {children}
         </li>
     )
 }
 
-const Categories = () => {
-    type TTab = | 'all' | 'meat' | 'vegan' | 'bbq' | 'hot' | 'closed'
-
+const SortByCategories = () => {
+    const {category, setCategory} = useCategory() as ICategoryContext
     const [currentTab, setCurrentTab] = useState<TTab>('all')
+    const {setLoading, setStatePizza} = usePizza() as TPizzaStateContext
 
     const onClick = (e: ChangeEvent<HTMLLIElement>) => {
+        const currentCategory = e.target.dataset.value
+
+        if (category !== currentCategory && currentCategory) {
+            setCategory(currentCategory)
+            setLoading(true)
+            setStatePizza([])
+        }
         setCurrentTab(e.target.dataset.value as TTab)
     }
 
@@ -54,31 +66,53 @@ const Categories = () => {
     )
 }
 
-const SortByType:FC = () => {
-    const {sort, setSort} = useSort()
+const SortByType: FC = () => {
+    const {sort, setSort} = useSort() as IUseSort
+    const {setStatePizza} = usePizza() as TPizzaStateContext
     const {ref, isComponentVisible, setIsComponentVisible} = useComponentVisible(false)
 
     const toggleDropdown = (): void => {
         setIsComponentVisible(!isComponentVisible)
     }
 
-    const toggleSort = (value: string) => {
-        setSort(value)
+    const toggleSort = (value: 'rating' | 'price') => {
+        setStatePizza([])
+        if (value === sort.name) {
+            setSort({
+                name: value,
+                params: sort.params === 'asc' ? 'desc' : 'asc'
+            })
+        } else {
+            setSort({
+                name: value,
+                params: 'asc'
+            })
+        }
         setIsComponentVisible(false)
     }
 
     return (
         <div className={styles.sortContainer} ref={ref}>
             <p className={styles.sort}>
-                Сортировка по: <span className={styles.sortTag} onClick={toggleDropdown}>{sort === 'popular' ? 'популярности' : 'цене'}</span>
+                <span>Сортировка по:</span>
+                <span className={styles.sortTag} onClick={toggleDropdown}>
+                    {sort.name === 'rating' ? 'популярности' : 'цене'}
+                    <span className={sort.params === 'asc' ? styles.sortArrowRotated : styles.sortArrow}/>
+                </span>
             </p>
 
             {
                 isComponentVisible
                     ?
                     <ul className={styles.sortList}>
-                        <li className={styles.sortItem} onClick={() => toggleSort('popular')}>популярности</li>
-                        <li className={styles.sortItem} onClick={() => toggleSort('price')}>цене</li>
+                        <li className={styles.sortItem} onClick={() => toggleSort('rating')}>
+                            <span>
+                                популярности
+                            </span>
+                        </li>
+                        <li className={styles.sortItem} onClick={() => toggleSort('price')}>
+                            <span>цене</span>
+                        </li>
                     </ul>
                     :
                     null
@@ -87,34 +121,32 @@ const SortByType:FC = () => {
     )
 }
 
-
 const Content = () => {
-    const {cart, addPizzaToCart, findCurrentPizza, deletePizzaFromCart, filterPizzasInCartById} = useCart()
-    const {pizza, loading} = usePizza()
+    const {statePizza, loading} = usePizza() as TPizzaStateContext
 
     return (
         <>
             <section className={styles.contentContainer}>
-                <Categories/>
+                <SortByCategories/>
                 <SortByType/>
             </section>
+            <h2>Все пиццы</h2>
             <section className={styles.pizzaContainer}>
-                {pizza.length && loading && pizza.map((item: IPizza) => {
-                    return (
-                        <PizzaBlock
-                            key={item.id}
-                            imageUrl={item.imageUrl}
-                            name={item.name}
-                            sizes={item.sizes}
-                            price={item.price}
-                            types={item.types}
-                            id={item.id}
-                            addPizza={addPizzaToCart}
-                            filterPizzas={filterPizzasInCartById}
-
-                        />
-                    )
-                })}
+                {statePizza.length >= 1 && loading ? statePizza.map((item: IPizza) => {
+                        return (
+                            <PizzaBlock
+                                key={item.id}
+                                imageUrl={item.imageUrl}
+                                name={item.name}
+                                sizes={item.sizes}
+                                price={item.price}
+                                types={item.types}
+                                id={item.id}
+                            />
+                        )
+                    }) :
+                    Array.from(Array(8).keys()).map((item) => <PizzaBlockSkeleton key={item}/>)
+                }
             </section>
         </>
     );
